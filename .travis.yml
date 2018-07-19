@@ -10,4 +10,4 @@ script:
   - mvn clean package
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 27bb395b-6dd6-4e34-9f67-ba129f13da3a
+  - bash <(curl -s https://codecov.io/bash)

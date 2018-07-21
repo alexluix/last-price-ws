@@ -36,15 +36,15 @@ POST /pricing/batch
 
 ### Posting price data to batch
 
-POST /pricing/batch/{id}
+POST /pricing/batch/{batch-id}
 
 ### Completing batch
 
-POST /pricing/batch/{id}/complete
+POST /pricing/batch/{batch-id}/complete
 
 ### Cancelling batch
 
-POST /pricing/batch/{id}/cancel
+POST /pricing/batch/{batch-id}/cancel
 
 ### Request price
 

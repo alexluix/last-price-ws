@@ -34,7 +34,7 @@ public class BatchController {
     public ResponseEntity<Object> postData(
             @PathVariable("id") long batchId, @RequestBody PriceDataChunk priceDataChunk) {
 
-        if (batchId == 0) throw new IllegalArgumentException();
+        throwUnhandledExceptionForTests(batchId);
 
         logger.info("Received price data chunk: {}", priceDataChunk);
 
@@ -43,6 +43,36 @@ public class BatchController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    @RequestMapping("/batch/{id}/complete")
+    public ResponseEntity<Object> completeBatch(@PathVariable("id") long batchId) {
+        priceRegistryService.completeBatch(batchId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    @RequestMapping("/batch/{id}/cancel")
+    public ResponseEntity<Object> cancelBatch(@PathVariable("id") long batchId) {
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    @RequestMapping("/instrument/{id}/price")
+    public ResponseEntity<Object> getPrice(@PathVariable("id") long refId) {
+        Price<JsonNode> price = priceRegistryService.getPrice(refId);
+
+        if (price == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(price);
+        }
+    }
+
+    private void throwUnhandledExceptionForTests(long batchId) {
+        if (batchId == 0) throw new IllegalArgumentException();
     }
 
 }

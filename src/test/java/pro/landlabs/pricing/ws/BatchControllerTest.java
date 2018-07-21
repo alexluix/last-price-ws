@@ -1,5 +1,8 @@
 package pro.landlabs.pricing.ws;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import pro.landlabs.pricing.model.Price;
+import pro.landlabs.pricing.model.PriceDataChunk;
 import pro.landlabs.pricing.testdata.PriceDataMother;
 
 import java.nio.charset.Charset;
@@ -33,6 +38,9 @@ public class BatchControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
@@ -74,6 +82,37 @@ public class BatchControllerTest {
     }
 
     @Test
+    public void shouldPostDataAndReadData() throws Exception {
+        String response = mockMvc.perform(post("/pricing/batch")
+                .contentType(contentType))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        long batchId = Long.valueOf(response);
+        assertThat(batchId, greaterThan(0L));
+
+        Price<JsonNode> price1 = PriceDataMother.createRandomPrice();
+        Price<JsonNode> price2 = PriceDataMother.createRandomPrice();
+        Price<JsonNode> price3 = PriceDataMother.createRandomPrice();
+
+        PriceDataChunk priceDataChunk1 = new PriceDataChunk(ImmutableList.of(price1, price2));
+        mockMvc.perform(post("/pricing/batch/" + batchId)
+                .contentType(contentType)
+                .content(objectMapper.writeValueAsString(priceDataChunk1)))
+                .andExpect(status().isOk());
+
+        PriceDataChunk priceDataChunk2 = new PriceDataChunk(ImmutableList.of(price2, price3));
+        mockMvc.perform(post("/pricing/batch/" + batchId)
+                .contentType(contentType)
+                .content(objectMapper.writeValueAsString(priceDataChunk2)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/pricing/batch/" + batchId + "/complete"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/pricing/instrument/" + price1.getRefId() + "/price"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void shouldThrowErrorWhenPriceDataIsEmpty() throws Exception {
         mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType))
@@ -90,7 +129,7 @@ public class BatchControllerTest {
 
     @Test
     public void shouldResolveUnhandledExceptionAsBadRequestResponse() throws Exception {
-        mockMvc.perform(get("/pricing/batch/0")).andExpect(status().isBadRequest());
+        mockMvc.perform(post("/pricing/batch/0")).andExpect(status().isBadRequest());
     }
 
 }

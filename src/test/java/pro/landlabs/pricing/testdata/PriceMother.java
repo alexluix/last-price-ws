@@ -37,7 +37,7 @@ public class PriceMother {
     public static Price<JsonNode> createRandomPrice() {
         Random random = new Random();
         int refId = random.nextInt(1_000);
-        double randomAmount = 1 + Math.pow(random.nextInt(10), -1);
+        double randomAmount = 1 + Math.pow(random.nextInt(9) + 1, -1);
 
         JsonNode pricePayload;
         try {

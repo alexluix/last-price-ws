@@ -25,4 +25,8 @@ public class CompactingRegistry<K, V> {
         return new CompactingBatch<>(mergeFunction, consumer);
     }
 
+    public V getValue(K key) {
+        return registryMap.get(key);
+    }
+
 }

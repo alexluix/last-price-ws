@@ -13,7 +13,7 @@ public class BatchController {
     @PostMapping
     @RequestMapping("/batch")
     public ResponseEntity<Integer> createBatch() {
-        return ResponseEntity.ok(0);
+        return ResponseEntity.ok(1);
     }
 
     @PostMapping

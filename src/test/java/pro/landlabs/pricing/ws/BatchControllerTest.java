@@ -1,5 +1,6 @@
 package pro.landlabs.pricing.ws;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.Charset;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -39,10 +42,12 @@ public class BatchControllerTest {
 
     @Test
     public void shouldCreateBatch() throws Exception {
-        mockMvc.perform(post("/pricing/batch")
-                .contentType(contentType)
-                .content("{ }"))
-                .andExpect(status().isOk());
+        String response = mockMvc.perform(post("/pricing/batch"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(Long.valueOf(response), Matchers.greaterThan(0L));
     }
 
     @Test

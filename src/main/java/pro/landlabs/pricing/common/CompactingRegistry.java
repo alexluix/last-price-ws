@@ -4,13 +4,14 @@ import com.google.common.collect.Maps;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 @ThreadSafe
 public class CompactingRegistry<K, V> {
 
-    private final Map<K, V> registryMap = Maps.newConcurrentMap();
+    private final ConcurrentMap<K, V> registryMap = Maps.newConcurrentMap();
 
     private final BiFunction<V, V, V> mergeFunction;
     private final Consumer<Map<K, V>> consumer;

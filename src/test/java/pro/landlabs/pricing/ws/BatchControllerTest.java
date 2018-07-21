@@ -13,6 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.Charset;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -46,10 +47,15 @@ public class BatchControllerTest {
 
     @Test
     public void shouldPostDataToBatch() throws Exception {
-        mockMvc.perform(post("/pricing/batch/0")
+        mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType)
                 .content("{ }"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldResolveUnhandledExceptionAsBadRequestResponse() throws Exception {
+        mockMvc.perform(get("/pricing/batch/0")).andExpect(status().isBadRequest());
     }
 
 }

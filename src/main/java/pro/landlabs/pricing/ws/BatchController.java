@@ -19,6 +19,9 @@ public class BatchController {
     @PostMapping
     @RequestMapping("/batch/{id}")
     public ResponseEntity<Object> postData(@PathVariable("id") long batchId) {
+
+        if (batchId == 0) throw new IllegalArgumentException();
+
         return ResponseEntity.ok().build();
     }
 

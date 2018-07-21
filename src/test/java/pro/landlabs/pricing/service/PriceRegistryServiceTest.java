@@ -1,6 +1,7 @@
 package pro.landlabs.pricing.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pro.landlabs.pricing.model.Price;
@@ -59,6 +60,38 @@ class PriceRegistryServiceTest {
 
         Price<JsonNode> actualPrice = subject.getPrice(price.getRefId());
         assertThat(actualPrice, nullValue());
+    }
+
+    @Test
+    void shouldUpdatePrices() {
+        long batchId = subject.createBatch();
+        int refId = 7;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Price<JsonNode> price = PriceDataMother.createRandomPrice(refId, localDateTime);
+        Price<JsonNode> updatedPrice = PriceDataMother.createRandomPrice(refId, localDateTime.plusHours(1));
+
+        subject.addData(batchId, price);
+        subject.addData(batchId, updatedPrice);
+        subject.completeBatch(batchId);
+
+        Price<JsonNode> actualPrice = subject.getPrice(price.getRefId());
+        assertThat(actualPrice, equalTo(updatedPrice));
+    }
+
+    @Test
+    void shouldNotUpdateNewerPrices() {
+        long batchId = subject.createBatch();
+        int refId = 9;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Price<JsonNode> price = PriceDataMother.createRandomPrice(refId, localDateTime);
+        Price<JsonNode> updatedPrice = PriceDataMother.createRandomPrice(refId, localDateTime.plusHours(1));
+
+        subject.addData(batchId, updatedPrice);
+        subject.addData(batchId, price);
+        subject.completeBatch(batchId);
+
+        Price<JsonNode> actualPrice = subject.getPrice(price.getRefId());
+        assertThat(actualPrice, equalTo(updatedPrice));
     }
 
     @Test

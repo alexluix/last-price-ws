@@ -37,6 +37,16 @@ public class PriceDataMother {
     public static Price<JsonNode> createRandomPrice() {
         Random random = new Random();
         int refId = random.nextInt(1_000);
+
+        return createRandomPrice(refId, LocalDateTime.now());
+    }
+
+    public static Price<JsonNode> createRandomPrice(int refId, LocalDateTime localDateTime) {
+        return createPrice(refId, localDateTime, createRandomPricePayload());
+    }
+
+    private static JsonNode createRandomPricePayload() {
+        Random random = new Random();
         double randomAmount = 1 + Math.pow(random.nextInt(9) + 1, -1);
 
         JsonNode pricePayload;
@@ -46,7 +56,7 @@ public class PriceDataMother {
             throw new RuntimeException(e);
         }
 
-        return createPrice(refId, LocalDateTime.now(), pricePayload);
+        return pricePayload;
     }
 
     private static Price<JsonNode> createPrice(long refId, LocalDateTime asOf, JsonNode pricePayload) {

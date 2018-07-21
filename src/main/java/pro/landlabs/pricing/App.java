@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import pro.landlabs.pricing.service.PriceRegistryService;
 
 @SpringBootApplication
 public class App {
@@ -19,6 +20,11 @@ public class App {
         return new ObjectMapper()
                 .registerModule(new JodaModule())
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    }
+
+    @Bean
+    public PriceRegistryService priceRegistryService() {
+        return new PriceRegistryService();
     }
 
 }

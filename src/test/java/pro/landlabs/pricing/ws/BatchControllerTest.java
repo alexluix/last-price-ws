@@ -1,6 +1,5 @@
 package pro.landlabs.pricing.ws;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +15,7 @@ import pro.landlabs.pricing.testdata.PriceDataMother;
 import java.nio.charset.Charset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -48,12 +48,26 @@ public class BatchControllerTest {
                 .andExpect(content().contentType(contentType))
                 .andReturn().getResponse().getContentAsString();
 
-        assertThat(Long.valueOf(response), Matchers.greaterThan(0L));
+        assertThat(Long.valueOf(response), greaterThan(0L));
+    }
+
+    @Test
+    public void shouldNotPostDataToNonExistingBatch() throws Exception {
+        mockMvc.perform(post("/pricing/batch/7")
+                .contentType(contentType)
+                .content(PriceDataMother.getJsonPriceDataChunk1()))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldPostDataToBatch() throws Exception {
-        mockMvc.perform(post("/pricing/batch/1")
+        String response = mockMvc.perform(post("/pricing/batch")
+                .contentType(contentType))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        long batchId = Long.valueOf(response);
+        assertThat(batchId, greaterThan(0L));
+
+        mockMvc.perform(post("/pricing/batch/" + batchId)
                 .contentType(contentType)
                 .content(PriceDataMother.getJsonPriceDataChunk1()))
                 .andExpect(status().isOk());

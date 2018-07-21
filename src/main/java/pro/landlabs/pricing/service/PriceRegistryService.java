@@ -20,7 +20,7 @@ public class PriceRegistryService {
 
     private final CompactingRegistry<Long, Price<JsonNode>> registry = new CompactingRegistry<>(mergeFunction);
 
-    long createBatch() {
+    public long createBatch() {
         CompactingBatch<Long, Price<JsonNode>> batch = registry.createBatch();
 
         long batchId = batchSequenceId.incrementAndGet();
@@ -29,15 +29,15 @@ public class PriceRegistryService {
         return batchId;
     }
 
-    void addData(long batchId, Price<JsonNode> price) {
+    public void addData(long batchId, Price<JsonNode> price) {
         getBatch(batchId).add(price.getRefId(), price);
     }
 
-    void completeBatch(long batchId) {
+    public void completeBatch(long batchId) {
         getBatch(batchId).complete();
     }
 
-    void cancelBatch(long batchId) {
+    public void cancelBatch(long batchId) {
         getBatch(batchId).cancel();
     }
 

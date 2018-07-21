@@ -3,6 +3,7 @@ package pro.landlabs.pricing.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.util.List;
@@ -31,6 +32,13 @@ public class PriceDataChunk {
     @Override
     public int hashCode() {
         return Objects.hashCode(prices);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("prices", prices)
+                .toString();
     }
 
 }

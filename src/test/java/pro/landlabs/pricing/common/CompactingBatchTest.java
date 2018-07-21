@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static pro.landlabs.pricing.testdata.TestCommons.LAST_DATE_MERGE;
@@ -34,7 +35,7 @@ class CompactingBatchTest {
 
         subject.add(key, value);
 
-        assertThat(consumerQueue.size(), equalTo(0));
+        assertThat(consumerQueue.isEmpty(), is(true));
     }
 
     @Test
@@ -141,7 +142,7 @@ class CompactingBatchTest {
         subject.cancel();
         subject.complete();
 
-        assertThat(consumerQueue.size(), equalTo(0));
+        assertThat(consumerQueue.isEmpty(), is(true));
     }
 
 }

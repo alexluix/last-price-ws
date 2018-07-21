@@ -30,19 +30,27 @@ public class PriceRegistryService {
     }
 
     void addData(long batchId, Price<JsonNode> price) {
-        CompactingBatch<Long, Price<JsonNode>> batch = batches.get(batchId);
-
-        if (batch == null) throw new BatchNotFoundException();
+        getBatch(batchId).add(price.getRefId(), price);
     }
 
     void completeBatch(long batchId) {
+        getBatch(batchId).complete();
     }
 
     void cancelBatch(long batchId) {
+        getBatch(batchId).cancel();
     }
 
     public Price<JsonNode> getPrice(long refId) {
-        return null;
+        return registry.getValue(refId);
+    }
+
+    private CompactingBatch<Long, Price<JsonNode>> getBatch(long batchId) {
+        CompactingBatch<Long, Price<JsonNode>> batch = batches.get(batchId);
+
+        if (batch == null) throw new BatchNotFoundException();
+
+        return batch;
     }
 
 }

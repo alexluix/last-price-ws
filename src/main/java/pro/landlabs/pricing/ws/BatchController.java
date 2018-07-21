@@ -56,6 +56,8 @@ public class BatchController {
     @PostMapping
     @RequestMapping("/batch/{id}/cancel")
     public ResponseEntity<Object> cancelBatch(@PathVariable("id") long batchId) {
+        priceRegistryService.cancelBatch(batchId);
+
         return ResponseEntity.ok().build();
     }
 

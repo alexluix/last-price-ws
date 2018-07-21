@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    private static final String BAD_REQUEST_MESSAGE = "Unable to process request";
+    public static final String BAD_REQUEST_MESSAGE = "Unable to process request";
     public static final String BATCH_NOT_FOUND_MESSAGE = "Batch not found";
 
     @ExceptionHandler

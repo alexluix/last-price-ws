@@ -20,6 +20,7 @@ import pro.landlabs.pricing.testdata.PriceDataMother;
 import java.nio.charset.Charset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -113,6 +114,50 @@ public class BatchControllerTest {
     }
 
     @Test
+    public void shouldNotReadDataWhenBatchCancelledOrNotCompleted() throws Exception {
+        String response = mockMvc.perform(post("/pricing/batch")
+                .contentType(contentType))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        long batchId = Long.valueOf(response);
+        assertThat(batchId, greaterThan(0L));
+
+        Price<JsonNode> price = PriceDataMother.createRandomPrice();
+        PriceDataChunk priceDataChunk =
+                new PriceDataChunk(ImmutableList.of(price));
+        mockMvc.perform(post("/pricing/batch/" + batchId)
+                .contentType(contentType)
+                .content(objectMapper.writeValueAsString(priceDataChunk)))
+                .andExpect(status().isOk());
+
+        String getPriceUrl = "/pricing/instrument/" + price.getRefId() + "/price";
+
+        mockMvc.perform(get(getPriceUrl)).andExpect(status().isNotFound());
+
+        mockMvc.perform(post("/pricing/batch/" + batchId + "/cancel")).andExpect(status().isOk());
+        mockMvc.perform(post("/pricing/batch/" + batchId + "/complete")).andExpect(status().isOk());
+
+        mockMvc.perform(get(getPriceUrl)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldThrowErrorWhenCompletingNonExistingBatch() throws Exception {
+        String response = mockMvc.perform(post("/pricing/batch/333/complete"))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(response, containsString(GlobalExceptionHandler.BATCH_NOT_FOUND_MESSAGE));
+    }
+
+    @Test
+    public void shouldThrowErrorWhenCancellingNonExistingBatch() throws Exception {
+        String response = mockMvc.perform(post("/pricing/batch/333/cancel"))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(response, containsString(GlobalExceptionHandler.BATCH_NOT_FOUND_MESSAGE));
+    }
+
+    @Test
     public void shouldThrowErrorWhenPriceDataIsEmpty() throws Exception {
         mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType))
@@ -129,7 +174,11 @@ public class BatchControllerTest {
 
     @Test
     public void shouldResolveUnhandledExceptionAsBadRequestResponse() throws Exception {
-        mockMvc.perform(post("/pricing/batch/0")).andExpect(status().isBadRequest());
+        String response = mockMvc.perform(post("/pricing/batch/0"))
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(response, containsString(GlobalExceptionHandler.BAD_REQUEST_MESSAGE));
     }
 
 }

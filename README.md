@@ -14,3 +14,38 @@ Price aggregator and last price repository web service.
 ## Non-functional requirements
 
 -   application should cope with large batches of incoming data ~ 1MB
+
+## Technologies
+
+-   Java 8
+-   Spring Boot
+-   Jackson JSON
+-   Maven
+
+## Build
+
+-   build: `mvn clean package`
+
+## REST Endpoints
+
+Description of API endpoints.
+
+### Creating batch
+
+POST /pricing/batch
+
+### Posting price data to batch
+
+POST /pricing/batch/{id}
+
+### Completing batch
+
+POST /pricing/batch/{id}/complete
+
+### Cancelling batch
+
+POST /pricing/batch/{id}/cancel
+
+### Request price
+
+GET /pricing/instrument/{instrument-id}/price

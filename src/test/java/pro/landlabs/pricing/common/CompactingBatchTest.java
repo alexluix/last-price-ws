@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-import java.util.function.BiFunction;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static pro.landlabs.pricing.testdata.TestCommons.LAST_DATE_MERGE;
 
 class CompactingBatchTest {
 
@@ -22,10 +22,7 @@ class CompactingBatchTest {
 
     @BeforeEach
     void setUp() {
-        BiFunction<DateTime, DateTime, DateTime> mergeFunction =
-                (existing, incoming) -> existing.isBefore(incoming) ? incoming : existing;
-
-        subject = new CompactingBatch<>(mergeFunction, consumerQueue::offer);
+        subject = new CompactingBatch<>(LAST_DATE_MERGE, consumerQueue::offer);
 
         consumerQueue.clear();
     }

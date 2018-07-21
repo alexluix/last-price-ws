@@ -1,4 +1,4 @@
-package pro.landlabs.pricing;
+package pro.landlabs.pricing.model;
 
 import org.joda.time.DateTime;
 

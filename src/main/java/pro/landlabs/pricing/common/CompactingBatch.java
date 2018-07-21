@@ -13,8 +13,9 @@ import java.util.function.Consumer;
 public class CompactingBatch<K, V> {
 
     private final BiFunction<V, V, V> mergeFunction;
-    private final Consumer<Map<K, V>> consumer;
     private final ConcurrentMap<K, V> batchMap = Maps.newConcurrentMap();
+
+    private Consumer<Map<K, V>> consumer;
 
     public CompactingBatch(BiFunction<V, V, V> mergeFunction, Consumer<Map<K, V>> consumer) {
         this.mergeFunction = mergeFunction;
@@ -30,10 +31,16 @@ public class CompactingBatch<K, V> {
 
     public void complete() {
         consumer.accept(ImmutableMap.copyOf(batchMap));
+        reset();
     }
 
     public void cancel() {
+        reset();
+    }
+
+    private void reset() {
         batchMap.clear();
+        consumer = map -> {};
     }
 
 }

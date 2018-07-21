@@ -158,6 +158,13 @@ public class BatchControllerTest {
     }
 
     @Test
+    public void shouldThrowErrorWhenPriceNotFound() throws Exception {
+        mockMvc.perform(get("/pricing/instrument/777/price")
+                .contentType(contentType))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void shouldThrowErrorWhenPriceDataIsEmpty() throws Exception {
         mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType))

@@ -11,7 +11,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Random;
 
-public class PriceMother {
+public class PriceDataMother {
 
     private static final String TEST_DATA_FOLDER = "test-data";
 

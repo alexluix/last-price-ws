@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import pro.landlabs.pricing.testdata.PriceMother;
+import pro.landlabs.pricing.testdata.PriceDataMother;
 
 import java.nio.charset.Charset;
 
@@ -55,7 +55,7 @@ public class BatchControllerTest {
     public void shouldPostDataToBatch() throws Exception {
         mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType)
-                .content(PriceMother.getJsonPriceDataChunk1()))
+                .content(PriceDataMother.getJsonPriceDataChunk1()))
                 .andExpect(status().isOk());
     }
 
@@ -70,7 +70,7 @@ public class BatchControllerTest {
     public void shouldThrowErrorWhenPriceDataIsCorrupted() throws Exception {
         mockMvc.perform(post("/pricing/batch/1")
                 .contentType(contentType)
-                .content(PriceMother.getJsonPriceDataChunkCorrupted()))
+                .content(PriceDataMother.getJsonPriceDataChunkCorrupted()))
                 .andExpect(status().isBadRequest());
     }
 

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import pro.landlabs.pricing.testdata.PriceMother;
+import pro.landlabs.pricing.testdata.PriceDataMother;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -22,7 +22,7 @@ public class PriceSerializationTest {
 
     @Test
     public void shouldSerializeAndDeserializeBack() throws Exception {
-        Price<JsonNode> price = PriceMother.createRandomPrice();
+        Price<JsonNode> price = PriceDataMother.createRandomPrice();
 
         String jsonString = objectMapper.writeValueAsString(price);
 

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import pro.landlabs.pricing.testdata.PriceMother;
+import pro.landlabs.pricing.testdata.PriceDataMother;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -23,9 +23,9 @@ public class PriceDataChunkSerializationTest {
     @Test
     public void shouldSerializeAndDeserializeBack() throws Exception {
         // given
-        Price<JsonNode> randomPrice1 = PriceMother.createRandomPrice();
-        Price<JsonNode> randomPrice2 = PriceMother.createRandomPrice();
-        Price<JsonNode> randomPrice3 = PriceMother.createRandomPrice();
+        Price<JsonNode> randomPrice1 = PriceDataMother.createRandomPrice();
+        Price<JsonNode> randomPrice2 = PriceDataMother.createRandomPrice();
+        Price<JsonNode> randomPrice3 = PriceDataMother.createRandomPrice();
         ImmutableList<Price<JsonNode>> prices = ImmutableList.of(
                 randomPrice1, randomPrice2, randomPrice3
         );

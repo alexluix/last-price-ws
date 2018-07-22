@@ -3,11 +3,14 @@ package pro.landlabs.pricing.ws;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.landlabs.pricing.model.Price;
 import pro.landlabs.pricing.model.PriceDataChunk;
 import pro.landlabs.pricing.service.PriceRegistryService;
+
+import java.util.AbstractMap;
 
 @RestController
 @RequestMapping("/pricing")
@@ -22,10 +25,12 @@ public class BatchController {
     }
 
     @PostMapping("/batches")
-    public ResponseEntity<Long> createBatch() {
+    public ResponseEntity<AbstractMap.SimpleEntry<String, Long>> createBatch() {
         long batchId = priceRegistryService.createBatch();
 
-        return ResponseEntity.ok(batchId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new AbstractMap.SimpleEntry<>("batchId", batchId));
     }
 
     @PostMapping("/batches/{id}")

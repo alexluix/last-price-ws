@@ -1,5 +1,7 @@
 package pro.landlabs.pricing.ws;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -23,8 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
@@ -44,6 +45,15 @@ public class BatchControllerTest {
 
     private MockMvc mockMvc;
 
+    private static class BatchId {
+        private final long batchId;
+
+        @JsonCreator
+        private BatchId(@JsonProperty("batchId") long batchId) {
+            this.batchId = batchId;
+        }
+    }
+
     @Before
     public void setUp() {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
@@ -51,12 +61,10 @@ public class BatchControllerTest {
 
     @Test
     public void shouldCreateBatch() throws Exception {
-        String response = mockMvc.perform(post("/pricing/batches"))
+        mockMvc.perform(post("/pricing/batches"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andReturn().getResponse().getContentAsString();
-
-        assertThat(Long.valueOf(response), greaterThan(0L));
+                .andExpect(jsonPath("batchId", greaterThan(0)));
     }
 
     @Test
@@ -71,8 +79,10 @@ public class BatchControllerTest {
     public void shouldPostDataToBatch() throws Exception {
         String response = mockMvc.perform(post("/pricing/batches")
                 .contentType(contentType))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        long batchId = Long.valueOf(response);
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        long batchId = objectMapper.readValue(response, BatchId.class).batchId;
         assertThat(batchId, greaterThan(0L));
 
         mockMvc.perform(post("/pricing/batches/" + batchId)
@@ -85,8 +95,10 @@ public class BatchControllerTest {
     public void shouldPostDataAndReadData() throws Exception {
         String response = mockMvc.perform(post("/pricing/batches")
                 .contentType(contentType))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        long batchId = Long.valueOf(response);
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        long batchId = objectMapper.readValue(response, BatchId.class).batchId;
         assertThat(batchId, greaterThan(0L));
 
         Price<JsonNode> price1 = PriceDataMother.createRandomPrice();
@@ -116,8 +128,10 @@ public class BatchControllerTest {
     public void shouldNotReadDataWhenBatchCancelledOrNotCompleted() throws Exception {
         String response = mockMvc.perform(post("/pricing/batches")
                 .contentType(contentType))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        long batchId = Long.valueOf(response);
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        long batchId = objectMapper.readValue(response, BatchId.class).batchId;
         assertThat(batchId, greaterThan(0L));
 
         Price<JsonNode> price = PriceDataMother.createRandomPrice();

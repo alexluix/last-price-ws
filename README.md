@@ -42,7 +42,9 @@ POST /pricing/batches
 ```
 HTTP/1.1 200
 
-6
+{
+  "batchId": 6
+}
 ```
 
 ### Posting price data to batch

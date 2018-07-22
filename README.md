@@ -15,6 +15,12 @@ Price aggregator and last price repository web service.
 
 -   application should cope with large batches of incoming data ~ 1MB
 
+## Perspective improvements
+
+-   allow publishing first data chunk on batch-create request
+-   stream processing of data chunks: buffered reading and JSON parsing
+-   expiration of pending batches
+
 ## Technologies
 
 -   Java 8

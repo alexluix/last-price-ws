@@ -146,5 +146,5 @@ HTTP/1.1 200
   }
 }
 ```
--   When batch is not found:
+-   When not found:
 `HTTP/1.1 404`

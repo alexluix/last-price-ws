@@ -34,8 +34,6 @@ public class BatchController {
     public ResponseEntity<Object> postData(
             @PathVariable("id") long batchId, @RequestBody PriceDataChunk priceDataChunk) {
 
-        throwUnhandledExceptionForTests(batchId);
-
         logger.info("Received price data chunk: {}", priceDataChunk);
 
         for (Price<JsonNode> price : priceDataChunk.getPrices()) {
@@ -71,10 +69,6 @@ public class BatchController {
         } else {
             return ResponseEntity.ok(price);
         }
-    }
-
-    private void throwUnhandledExceptionForTests(long batchId) {
-        if (batchId == 0) throw new IllegalArgumentException();
     }
 
 }

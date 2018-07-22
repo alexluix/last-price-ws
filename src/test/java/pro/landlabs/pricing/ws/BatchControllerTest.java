@@ -179,13 +179,4 @@ public class BatchControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void shouldResolveUnhandledExceptionAsBadRequestResponse() throws Exception {
-        String response = mockMvc.perform(post("/pricing/batch/0"))
-                .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
-
-        assertThat(response, containsString(GlobalExceptionHandler.BAD_REQUEST_MESSAGE));
-    }
-
 }

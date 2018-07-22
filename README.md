@@ -32,10 +32,10 @@ Description of API endpoints.
 
 ### Creating batch
 
-POST /pricing/batch
+POST /pricing/batches
 
 #### Request
-`curl -X "POST" "http://localhost:8080/pricing/batch"`
+`curl -X "POST" "http://localhost:8080/pricing/batches"`
 
 #### Response
 -   batch-id is returned:
@@ -47,11 +47,11 @@ HTTP/1.1 200
 
 ### Posting price data to batch
 
-POST /pricing/batch/{batch-id}
+POST /pricing/batches/{batch-id}
 
 #### Request
 ```
-curl -X "POST" "http://localhost:8080/pricing/batch/6" \
+curl -X "POST" "http://localhost:8080/pricing/batches/6" \
      -H 'Content-Type: application/json' \
      -d $'{
   "prices": [
@@ -90,10 +90,10 @@ curl -X "POST" "http://localhost:8080/pricing/batch/6" \
 
 ### Completing batch
 
-POST /pricing/batch/{batch-id}/complete
+POST /pricing/batches/{batch-id}/complete
 
 #### Request
-`curl -X "POST" "http://localhost:8080/pricing/batch/6/complete"`
+`curl -X "POST" "http://localhost:8080/pricing/batches/6/complete"`
 #### Response
 -   When successfully completed:
 `HTTP/1.1 200`
@@ -102,10 +102,10 @@ POST /pricing/batch/{batch-id}/complete
 
 ### Cancelling batch
 
-POST /pricing/batch/{batch-id}/cancel
+DELETE /pricing/batches/{batch-id}
 
 #### Request
-`curl -X "POST" "http://localhost:8080/pricing/batch/6/cancel"`
+`curl -X "DELETE" "http://localhost:8080/pricing/batches/6"`
 #### Response
 -   When successfully cancelled:
 `HTTP/1.1 200`
@@ -114,10 +114,10 @@ POST /pricing/batch/{batch-id}/cancel
 
 ### Request price
 
-GET /pricing/instrument/{instrument-id}/price
+GET /pricing/instruments/{instrument-id}/price
 
 #### Request
-`curl "http://localhost:8080/pricing/instrument/981/price"`
+`curl "http://localhost:8080/pricing/instruments/981/price"`
 #### Response
 -   When price found:
 ```

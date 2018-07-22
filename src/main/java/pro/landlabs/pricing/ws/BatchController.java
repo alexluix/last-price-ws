@@ -21,16 +21,14 @@ public class BatchController {
         this.priceRegistryService = priceRegistryService;
     }
 
-    @PostMapping
-    @RequestMapping("/batch")
+    @PostMapping("/batches")
     public ResponseEntity<Long> createBatch() {
         long batchId = priceRegistryService.createBatch();
 
         return ResponseEntity.ok(batchId);
     }
 
-    @PostMapping
-    @RequestMapping("/batch/{id}")
+    @PostMapping("/batches/{id}")
     public ResponseEntity<Object> postData(
             @PathVariable("id") long batchId, @RequestBody PriceDataChunk priceDataChunk) {
 
@@ -43,24 +41,21 @@ public class BatchController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping
-    @RequestMapping("/batch/{id}/complete")
-    public ResponseEntity<Object> completeBatch(@PathVariable("id") long batchId) {
-        priceRegistryService.completeBatch(batchId);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping
-    @RequestMapping("/batch/{id}/cancel")
+    @DeleteMapping("/batches/{id}")
     public ResponseEntity<Object> cancelBatch(@PathVariable("id") long batchId) {
         priceRegistryService.cancelBatch(batchId);
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    @RequestMapping("/instrument/{id}/price")
+    @PostMapping("/batches/{id}/complete")
+    public ResponseEntity<Object> completeBatch(@PathVariable("id") long batchId) {
+        priceRegistryService.completeBatch(batchId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/instruments/{id}/price")
     public ResponseEntity<Object> getPrice(@PathVariable("id") long refId) {
         Price<JsonNode> price = priceRegistryService.getPrice(refId);
 

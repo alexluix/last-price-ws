@@ -15,6 +15,8 @@
         <junit.jupiter.version>5.2.0</junit.jupiter.version>
         <junit.vintage.version>5.2.0</junit.vintage.version>
         <junit.platform.version>1.2.0</junit.platform.version>
+
+        <failsafe.tests.filter>**/*IT.java</failsafe.tests.filter>
     </properties>
 
     <dependencyManagement>
@@ -94,8 +96,32 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.21.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>${failsafe.tests.filter}</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.21.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>${failsafe.tests.filter}</exclude>
+                    </excludes>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>

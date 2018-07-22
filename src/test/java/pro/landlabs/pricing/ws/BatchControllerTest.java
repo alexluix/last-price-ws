@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import pro.landlabs.pricing.model.Price;
 import pro.landlabs.pricing.model.PriceDataChunk;
-import pro.landlabs.pricing.testdata.PriceDataMother;
+import pro.landlabs.pricing.test.PriceDataMother;
 
 import java.nio.charset.Charset;
 

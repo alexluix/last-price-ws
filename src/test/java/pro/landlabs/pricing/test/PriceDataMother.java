@@ -1,4 +1,4 @@
-package pro.landlabs.pricing.testdata;
+package pro.landlabs.pricing.test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

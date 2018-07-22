@@ -3,7 +3,7 @@ package pro.landlabs.pricing.common;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pro.landlabs.pricing.testdata.TestCommons;
+import pro.landlabs.pricing.test.TestCommons;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static pro.landlabs.pricing.testdata.TestCommons.LAST_DATE_MERGE;
+import static pro.landlabs.pricing.test.TestCommons.LAST_DATE_MERGE;
 
 class CompactingBatchTest {
 

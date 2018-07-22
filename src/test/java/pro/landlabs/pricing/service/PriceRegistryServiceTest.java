@@ -5,7 +5,7 @@ import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pro.landlabs.pricing.model.Price;
-import pro.landlabs.pricing.testdata.PriceDataMother;
+import pro.landlabs.pricing.test.PriceDataMother;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

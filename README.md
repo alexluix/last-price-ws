@@ -28,9 +28,16 @@ Price aggregator and last price repository web service.
 -   Jackson JSON
 -   Maven
 
-## Build
+## Build and tests
 
--   build: `mvn clean package`
+-   build and unit-tests: `mvn clean package`
+-   integration tests: `mvn verify`
+
+## Integration tests
+
+-   the application is started and verified via REST API
+-   the test posts data creating multiple batches in parallel for total of 1mi price records
+-   latest prices are then verified
 
 ## REST Endpoints
 

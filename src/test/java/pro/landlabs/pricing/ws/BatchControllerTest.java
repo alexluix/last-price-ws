@@ -1,7 +1,5 @@
 package pro.landlabs.pricing.ws;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -44,15 +42,6 @@ public class BatchControllerTest {
     private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
-
-    private static class BatchId {
-        private final long batchId;
-
-        @JsonCreator
-        private BatchId(@JsonProperty("batchId") long batchId) {
-            this.batchId = batchId;
-        }
-    }
 
     @Before
     public void setUp() {
